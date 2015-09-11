@@ -1,3 +1,6 @@
+use std::io::{BufReader};
+use std::fs::File;
+
 #[derive(Debug)]
 pub struct Root {
     next: Option<Vec<Node>>,
@@ -100,6 +103,21 @@ impl Word {
     pub fn prob(&self, total: f32) -> f32 {
         return self.part/total;
     }
+}
+
+pub fn read_corpus(filename: String) -> Root {
+    let mut reader = BufReader::new(File::open(filename).unwrap());
+
+    let r = Root::new();
+
+    for line in reader.lines() {
+            let l: String = line.unwrap();
+            let words = l.split(" ");
+            for word in words {
+                r.add(word);
+            }
+        }
+    return r;
 }
 
 fn main() {
